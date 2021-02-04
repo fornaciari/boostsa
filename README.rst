@@ -1,5 +1,5 @@
-BooStSa - **Boo**t**St**rap **Sa**mpling in pyhton
-============================================
+BooStSa - BootStrap Sampling in pyhton
+======================================
 
 
 
