@@ -40,22 +40,6 @@ def end(start, sep=True):
 ###############################################################################
 
 
-def file2list(pathfile, encoding='utf-8', elemtype=int, sep="\n", emptyend=False):
-    with open(pathfile, 'r', encoding=encoding) as input_file: str_file = input_file.read()
-    if emptyend: str_file = re.sub("\n+$", '', str_file) # via il o gli ultimi \n, se ci sono righe vuote alla fine del file
-    if elemtype == int:
-        out = [float(x) for x in str_file.split(sep)] # se il format è float, non lo traduce direttamente
-        out = [int(x) for x in out]
-    elif elemtype == float:
-        out = [float(x) for x in str_file.split(sep)]
-    else:
-        out = [x for x in str_file.split(sep)]
-    return out
-
-
-###############################################################################
-
-
 def get_lines(path, maxrow=-1):
     """the function traverses a generator until maxrow or StopIteration.
     the output is the another generator, having the wanted nr of lines"""
@@ -76,11 +60,6 @@ def read_file(filename, code='utf-8'):
     with open(filename, 'r', encoding=code) as f_in:
         out = f_in.read()
         return out
-
-
-def readjson(pathname):
-    with open(pathname) as f_in: out = json.load(f_in)
-    return out
 
 
 def writejson(data, pathname):
