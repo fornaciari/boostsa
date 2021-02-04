@@ -10,7 +10,7 @@ from setuptools import setup, find_packages
 # with open('README.rst') as readme_file:
 #     readme = readme_file.read()
 #
-with open("README.md", "r") as readme_file:
+with open("README.rst", "r") as readme_file:
     readme = readme_file.read()
 
 with open('requirements.txt') as f:
