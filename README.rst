@@ -1,4 +1,4 @@
-BooStSa - *Boo*t*St*rap *Sa*mpling in pyhton
+BooStSa - **Boo**t**St**rap **Sa**mpling in pyhton
 ============================================
 
 
