@@ -1,4 +1,9 @@
 # BooStSa
+
+.. image:: https://img.shields.io/github/license/fornaciari/boostsa
+        :target: https://lbesson.mit-license.org/
+        :alt: License
+
 This is a tool to compute bootstrap sampling significance test, 
 even in the pipeline of a complex experimental design.
 
