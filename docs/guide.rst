@@ -294,8 +294,8 @@ That will produce:
 
 .. _tethics:
 
-Technical and ethic considerations
-----------------------------------
+Technical and ethical considerations
+------------------------------------
 
 The significance test is a critical metric. It makes the difference between the experiments' success or failure. Also, significance is *not* a gray-scaled measure: the *p*-value is significant or not.
 
