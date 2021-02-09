@@ -9,7 +9,7 @@ Intro
 -----
 
 boostsa - BOOtSTrap SAmpinlg - is a tool to compute bootstrap sampling significance test,
-even in the pipeline of a complex experimental design.
+even in the pipeline of a complex experimental design...
 
 - Free software: MIT license
 - Documentation: https://boostsa.readthedocs.io.
