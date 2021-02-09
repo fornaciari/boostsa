@@ -35,10 +35,10 @@ sys.path.append(os.path.abspath('sphinxext'))
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ["sphinx_rtd_theme",
-              'matplotlib.sphinxext.only_directives',
-              'matplotlib.sphinxext.plot_directive',
-              'IPython.sphinxext.ipython_directive',
-              'IPython.sphinxext.ipython_console_highlighting',
+              # 'matplotlib.sphinxext.only_directives',
+              # 'matplotlib.sphinxext.plot_directive',
+              # 'IPython.sphinxext.ipython_directive',
+              # 'IPython.sphinxext.ipython_console_highlighting',
               'sphinx.ext.mathjax',
               'sphinx.ext.autodoc',
               'sphinx.ext.doctest',
