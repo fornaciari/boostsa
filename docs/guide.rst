@@ -228,7 +228,9 @@ Resuming outcomes
 
 Lastly, you could have run bootstrap sampling and stored the experiments' outcomes in your ``outcomes.json`` file.
 After that, you want to add new experiment and to compare them with the previous ones.
+
 Or, simply, you want re-run bootstrap sampling with different parameters.
+
 You can load and keep on feeding the json file with the ``loadjson`` function, that takes as input the path to the ``outcomes.json`` file:
 
 .. code-block:: python
