@@ -1,3 +1,0 @@
-,mean_epochs,acc,diff_acc,sign_acc,prec,diff_prec,sign_prec,rec,diff_rec,sign_rec,f1,diff_f1,sign_f1
-h0,,70.8,,,70.66,,,70.52,,,70.57,,
-h1,,73.55,2.75,**,73.79,3.13,**,73.85,3.33,**,73.55,2.98,**
