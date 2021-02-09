@@ -302,9 +302,9 @@ The significance test is a critical metric. It makes the difference between the 
 However, the parameters' choice strongly affects the bootstrap sampling test's outcome.
 
 Tuning the iterations' number is easy: the more the better.
-For fast evaluatiions, the ``boostsa`` default iterations' number is set to 100, but my advice is to rely only on results based on at least **1000 iterations**.
+For fast evaluations, the ``boostsa`` default iterations' number is set to 100, but my advice is to rely only on results based on at least **1000 iterations**.
 
-The sample size, in terms of total amount of cases' percentage, is a more opinable parameter.
+The sample size, in terms of total amount of cases' percentage, is a more debatable parameter.
 In literature, I only found the (not surprising) advice to not use a too small sample, because "*with small sample sizes, there is a risk that the calculated p-value will be artificially low—simply because the bootstrap samples are too similar*" (Søgaard et al., 2014).
 
 However, this is actually a case that occurs only with tiny samples.
