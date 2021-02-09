@@ -1,4 +1,4 @@
-BooStSa - BootStrap Sampling in pyhton
+BooStSa - BOOtSTrap SAmpling in pyhton
 ======================================
 
 
