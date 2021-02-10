@@ -11,11 +11,15 @@ Intro
 boostsa - BOOtSTrap SAmpinlg - is a tool to compute bootstrap sampling significance test,
 even in the pipeline of a complex experimental design.
 
-For the theoretical aspects of Bootstrap sampling, please refer to the paper:
+For the theoretical aspects of Bootstrap sampling, please refer to the following papers:
+
+ `Berg-Kirkpatrick, T., Burkett, D. & Klein, D. (2012, July).
+ *An Empirical Investigation of Statistical Significance in NLP*.
+ In Proceedings of the 2012 Joint Conference on Empirical Methods in Natural Language Processing and Computational Natural Language Learning (pp. 995-1005). <https://www.aclweb.org/anthology/D12-1091.pdf>`_
 
  `Søgaard, A., Johannsen, A., Plank, B., Hovy, D., & Alonso, H. M. (2014, June).
- *What’s in a p-value in NLP?* <https://www.aclweb.org/anthology/W14-1601.pdf>`_.
- In Proceedings of the eighteenth conference on computational natural language learning (pp. 1-10).
+ *What’s in a p-value in NLP?*.
+ In Proceedings of the eighteenth conference on computational natural language learning (pp. 1-10). <https://www.aclweb.org/anthology/W14-1601.pdf>`_
 
 See also :ref:`tethics`.
 
