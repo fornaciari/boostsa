@@ -7,9 +7,6 @@ from setuptools import setup, find_packages
 # with open('HISTORY.rst') as history_file:
 #     history = history_file.read()
 #
-# with open('README.rst') as readme_file:
-#     readme = readme_file.read()
-#
 with open("README.rst", "r") as readme_file:
     readme = readme_file.read()
 
@@ -18,11 +15,12 @@ with open('requirements.txt') as f:
 
 setup(
     name="boostsa",
-    version="0.1.4",
+    version="0.1.2",
     author="Tommaso Fornaciari",
     author_email="fornaciari@unibocconi.it",
     description="A package to compute bootstrap sampling significance test",
     long_description=readme, # readme + '\n\n' + history,
+    long_description_content_type="text/x-rst",
     url="https://github.com/fornaciari/bootstrap",
     packages=find_packages(),
     install_requires=requirements,

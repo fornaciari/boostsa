@@ -117,7 +117,6 @@ The ouput will be:
     h1  74.07    6.31       *  74.1      5.1           74.10      4.16            74.22     6.26        *
 
 That's it!
-Where you see two asterisks **\*\*** you have a significance with :math:`p \le .01`; one asterisk **\*** indicates siginficance with :math:`p \le .05`.
 
 
 For more complex experimental designs and technical/ethical considerations, please refer to the documentation page.
