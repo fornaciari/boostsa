@@ -13,8 +13,8 @@ even in the pipeline of a complex experimental design.
 
 For the theoretical aspects of Bootstrap sampling, please refer to the paper:
 
- Søgaard, A., Johannsen, A., Plank, B., Hovy, D., & Alonso, H. M. (2014, June).
- *What’s in a p-value in NLP?*.
+ `Søgaard, A., Johannsen, A., Plank, B., Hovy, D., & Alonso, H. M. (2014, June).
+ *What’s in a p-value in NLP?* <https://www.aclweb.org/anthology/W14-1601.pdf>`_.
  In Proceedings of the eighteenth conference on computational natural language learning (pp. 1-10).
 
 See also :ref:`tethics`.
