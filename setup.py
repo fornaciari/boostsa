@@ -23,7 +23,7 @@ setup(
     author_email="fornaciari@unibocconi.it",
     description="A package to compute bootstrap sampling significance test",
     long_description=readme, # readme + '\n\n' + history,
-    long_description_content_type="text/markdown/x-rst",
+    long_description_content_type="text/x-rst",
     url="https://github.com/fornaciari/bootstrap",
     packages=find_packages(),
     install_requires=requirements,
