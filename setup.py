@@ -18,12 +18,12 @@ with open('requirements.txt') as f:
 
 setup(
     name="boostsa",
-    version="0.1.2",
+    version="0.1.1",
     author="Tommaso Fornaciari",
     author_email="fornaciari@unibocconi.it",
     description="A package to compute bootstrap sampling significance test",
     long_description=readme, # readme + '\n\n' + history,
-    long_description_content_type="text/markdown",
+    long_description_content_type="text/markdown/x-rst",
     url="https://github.com/fornaciari/bootstrap",
     packages=find_packages(),
     install_requires=requirements,

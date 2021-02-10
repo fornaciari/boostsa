@@ -59,7 +59,7 @@ Therefore, *h0 predictions*, *h1 predictions* and *targets* will be the your ``B
 Outputs
 ^^^^^^^
 
-By defalut, boostsa produces two output files:
+By default, boostsa produces two output files:
 
 - ``results.tsv``, that contains the experiments' performance and the (possible) significance levels;
 - ``outcomes.json``, that contains targets and predictions for all the experimental conditions.
@@ -122,7 +122,7 @@ The ouput will be:
     h1  74.07    6.31       *  74.1      5.1           74.10      4.16            74.22     6.26        *
 
 That's it!
-Where you see two asterisks **\*\*** you have a significance with :math:`p \le .01`; one asterisk **\*** indicates siginficance with :math:`p \le .05`.
+Where you see two stars **\*\*** you have a significance with :math:`p \le .01`; one star **\*** indicates siginficance with :math:`p \le .05`.
 
 
 boostsa in a pipeline
