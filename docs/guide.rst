@@ -164,21 +164,21 @@ This is an example of these functions' use:
     boot = Bootstrap()
 
     # You run your first experiment, to compute your baseline performance.
-    # You have your targets list 'tatgets', and you obtain your predictions list 'h0_exp1_preidctions'
+    # You have your targets list 'tatgets', and you obtain your predictions list 'h0_exp1_predictions'
     # You feed your bootstrap instance with your lists:
 
-    boot.feed(h0='h0', exp_idx='h0.1', preds=h0_exp1_preidctions, targs=tatgets)
+    boot.feed(h0='h0', exp_idx='h0.1', preds=h0_exp1_predictions, targs=tatgets)
 
     # You could have re-run the same experiment, with different weigths' random initialization.
     # You keep on feeding your bootstrap instance with your outputs:
 
-    boot.feed(h0='h0', exp_idx='h0.2', preds=h0_exp2_preidctions, targs=targets)
+    boot.feed(h0='h0', exp_idx='h0.2', preds=h0_exp2_predictions, targs=targets)
 
     # Following the h0 experiments, you run the experiments that you want to compare with the first ones.
     # Note that, in these cases, you have to label both the experimental condition and the baseline you want to compare with.
 
-    boot.feed(h0='h0', h1='h1', exp_idx='h1.1', preds=h1_exp1_preidctions, targs=targets)
-    boot.feed(h0='h0', h1='h1', exp_idx='h1.2', preds=h1_exp2_preidctions, targs=targets)
+    boot.feed(h0='h0', h1='h1', exp_idx='h1.1', preds=h1_exp1_predictions, targs=targets)
+    boot.feed(h0='h0', h1='h1', exp_idx='h1.2', preds=h1_exp2_predictions, targs=targets)
 
     # When you ran all the experiments, you can compute the bootstrap sampling test:
 
