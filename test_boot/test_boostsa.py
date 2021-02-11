@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-# import sys
-# sys.path.append('/home/runner/work/boostsa/boostsa/')
+import sys
+sys.path.append('/home/runner/work/boostsa/boostsa/')
 
 from boostsa import Bootstrap
 boot = Bootstrap()
