@@ -36,7 +36,7 @@ jobs:
 #        echo $GITHUB_ENV
     - name: Test with pytest
       run: |
-        cp /home/runner/work/boostsa/*.py ./
+        cp /home/runner/work/boostsa/boostsa/*.py ./
         pytest
     - name: Install dependencies
       run: pip install wheel
