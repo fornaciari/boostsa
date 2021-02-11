@@ -9,6 +9,9 @@ boostsa - BOOtSTrap SAmpling in pyhton
         :target: https://lbesson.mit-license.org/
         :alt: License
 
+.. image:: https://github.com/fornaciari/boostsa/workflows/Python%20package/badge.svg
+        :target: https://github.com/fornaciari/boostsa/actions
+
 Intro
 -----
 
