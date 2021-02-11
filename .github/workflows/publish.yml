@@ -3,9 +3,7 @@
 
 name: Python Package
 
-on:
-  release:
-    types: [created]
+on: push
 
 jobs:
   deploy:
