@@ -9,7 +9,7 @@ boostsa - BOOtSTrap SAmpling in pyhton
         :target: https://lbesson.mit-license.org/
         :alt: License
 
-.. image:: https://github.com/fornaciari/boostsa/workflows/Python%20package/badge.svg
+.. image:: https://github.com/fornaciari/boostsa/workflows/Upload%20Python%20Package/badge.svg
         :target: https://github.com/fornaciari/boostsa/actions
 
 Intro
@@ -125,15 +125,14 @@ The ouput will be:
 
 That's it!
 
+For more complex experimental designs and technical/ethical considerations, please refer to the documentation page.
 
-Tutorial
---------
+Google colab
+------------
 
 .. |colab1| image:: https://colab.research.google.com/assets/colab-badge.svg
     :target: https://colab.research.google.com/drive/1KTPT29Zi2Wk57l4vQpGDvDCP3X18z4xf?usp=sharing
     :alt: Open In Colab
-
-For more complex experimental designs and technical/ethical considerations, please refer to the documentation page.
 
 +----------------------------------------------------------------+--------------------+
 | Name                                                           | Link               |
