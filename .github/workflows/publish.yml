@@ -31,7 +31,6 @@ jobs:
     - name: Test with pytest
       run: |
         pip install -r requirements.txt
-#        pip install -e .
         pytest
     - name: Install dependencies
       run: pip install wheel
