@@ -32,7 +32,7 @@ jobs:
       run: |
         pip install -r requirements.txt
         pip install -e .
-        pytest
+        python -m pytest
     - name: Install dependencies
       run: pip install wheel
     - name: Build package
