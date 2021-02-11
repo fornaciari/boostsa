@@ -1,6 +1,4 @@
 # coding=latin-1
-import sys
-sys.path.extend(['/home/runner/work/boostsa/boostsa', 'test_boot'])
 
 from boostsa import Bootstrap
 boot = Bootstrap()
