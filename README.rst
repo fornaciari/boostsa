@@ -119,4 +119,18 @@ The ouput will be:
 That's it!
 
 
+Tutorial
+--------
+
+.. |colab1| image:: https://colab.research.google.com/assets/colab-badge.svg
+    :target: https://colab.research.google.com/drive/14x6OOQ09Ojn54mNH8JY83bztrJ61yg0o?usp=sharing
+    :alt: Open In Colab
+
 For more complex experimental designs and technical/ethical considerations, please refer to the documentation page.
+
++----------------------------------------------------------------+--------------------+
+| Name                                                           | Link               |
++================================================================+====================+
+| You can try boostsa here:                                      | |colab1|           |
++----------------------------------------------------------------+--------------------+
+

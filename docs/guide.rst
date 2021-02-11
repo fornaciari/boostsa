@@ -222,7 +222,7 @@ The output will look like this:
     end: 2021/02/09 16:21:34  - time elapsed: 00:00:08
     ################################################################################
 
-With ``feed`` and ``run`` you can store several *h0* condtions and to compare them with several *h>0* condition.
+With ``feed`` and ``run`` you can store several *h0* conditions and to compare them with several *h>0* condition.
 For each condition, you can run multiple experiments.
 
 **Note:** the *h0* and *h>0* that you compare, must have equal targets. Otherwise an error will be raised.
