@@ -1,7 +1,7 @@
 boostsa - BOOtSTrap SAmpling in pyhton
 ======================================
 
-.. image:: https://img.shields.io/pypi/v/quica.svg
+.. image:: https://img.shields.io/pypi/v/boostsa.svg
         :target: https://pypi.python.org/pypi/boostsa
 
 
