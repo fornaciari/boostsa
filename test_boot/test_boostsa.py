@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# coding=latin-1
 from boostsa import Bootstrap
 boot = Bootstrap()
 boot.test(targs='test_boot/h0.0/targs.txt', h0_preds='test_boot/h0.0/preds.txt', h1_preds='test_boot/h1.0/preds.txt')
