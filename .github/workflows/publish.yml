@@ -30,8 +30,6 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        pip install -r requirements.txt
-        pip install -e .
         python -m pytest
     - name: Install dependencies
       run: pip install wheel
