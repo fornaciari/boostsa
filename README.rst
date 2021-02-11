@@ -4,13 +4,16 @@ boostsa - BOOtSTrap SAmpling in pyhton
 .. image:: https://img.shields.io/pypi/v/boostsa.svg
         :target: https://pypi.python.org/pypi/boostsa
 
-
 .. image:: https://img.shields.io/github/license/fornaciari/boostsa
         :target: https://lbesson.mit-license.org/
         :alt: License
 
 .. image:: https://github.com/fornaciari/boostsa/workflows/Python%20Package/badge.svg
         :target: https://github.com/fornaciari/boostsa/actions
+
+.. image:: https://readthedocs.org/projects/boostsa/badge/?version=latest
+        :target: https://boostsa.readthedocs.io/en/latest/?badge=latest
+        :alt: Documentation Status
 
 Intro
 -----
