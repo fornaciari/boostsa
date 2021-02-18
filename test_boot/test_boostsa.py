@@ -1,10 +1,10 @@
 # coding=latin-1
-import pprint
-import sys
-pprint.pprint(sys.path)
-sys.path.append('/home/runner/work/boostsa/boostsa')
-print()
-pprint.pprint(sys.path)
+# import pprint
+# import sys
+# pprint.pprint(sys.path)
+# sys.path.append('/home/runner/work/boostsa/boostsa')
+# print()
+# pprint.pprint(sys.path)
 
 
 from boostsa import Bootstrap
