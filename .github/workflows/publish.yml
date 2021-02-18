@@ -30,8 +30,8 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: set pythonpath
       run: |
-        echo "export PYTHONPATH=/home/runner/work/boostsa/boostsa"
-        echo "export PYTHONPATH=/home/runner/work/boostsa/test_boot"
+        $PYTHONPATH=. pytest
+        echo $PYTHONPATH
 #        echo "PYTHONPATH=/home/runner/work/boostsa/test_boot" >> $GITHUB_ENV
 #        echo "PYTHONPATH=/home/runner/work/boostsa/boostsa" >> $GITHUB_ENV
 #        echo $GITHUB_ENV
