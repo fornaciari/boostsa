@@ -2,6 +2,10 @@
 import pprint
 import sys
 pprint.pprint(sys.path)
+sys.path.append('/home/runner/work/boostsa/boostsa/boostsa')
+print()
+pprint.pprint(sys.path)
+
 
 from boostsa import Bootstrap
 boot = Bootstrap()
