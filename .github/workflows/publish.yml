@@ -34,9 +34,9 @@ jobs:
 #        echo "PYTHONPATH=/home/runner/work/boostsa/test_boot" >> $GITHUB_ENV
 #        echo "PYTHONPATH=/home/runner/work/boostsa/boostsa" >> $GITHUB_ENV
 #        echo $GITHUB_ENV
-    - name: Copy package
-      run: |
-        cp /home/runner/work/boostsa/boostsa/boostsa/*.py /home/runner/work/boostsa/boostsa/test_boot/
+#    - name: Copy package
+#      run: |
+#        cp /home/runner/work/boostsa/boostsa/boostsa/*.py /home/runner/work/boostsa/boostsa/test_boot/
     - name: Test with pytest
       run: |
         pytest
