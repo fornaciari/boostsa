@@ -1,4 +1,7 @@
 # coding=latin-1
+import pprint
+import sys
+pprint.pprint(sys.path)
 
 from boostsa import Bootstrap
 boot = Bootstrap()
