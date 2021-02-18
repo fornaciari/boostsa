@@ -2,7 +2,7 @@
 import pprint
 import sys
 pprint.pprint(sys.path)
-sys.path.append('/home/runner/work/boostsa/boostsa/boostsa')
+sys.path.append('/home/runner/work/boostsa/boostsa')
 print()
 pprint.pprint(sys.path)
 
