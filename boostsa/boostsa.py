@@ -194,7 +194,8 @@ class Bootstrap:
         targs = self.input2list(targs)
         preds = self.input2list(preds)
         idxs = self.input2list(idxs)
-        assert len(preds) == len(targs) == len(idxs), 'preds, targs or idxs have different length'
+        assert len(preds) == len(targs), 'preds and targs have different length'
+        if idxs is not None: assert len(preds) == len(idxs), 'preds/targs and idxs have different length'
         if h1:
             self.data[h0]['h1'][h1]['exp_idxs'].append(exp_idx)
             self.data[h0]['h1'][h1]['preds'].append(preds)
