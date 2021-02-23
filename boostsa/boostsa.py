@@ -228,9 +228,9 @@ class Bootstrap:
 
     @staticmethod
     def input2list(object, encoding='utf-8', elemtype=int, sep="\n", emptyend=True):
-        if type(object) is list:
+        if isinstance(object, list):
             return object
-        else:
+        elif isinstance(object, str):
             with open(object, 'r', encoding=encoding) as input_file: str_file = input_file.read()
             if emptyend: str_file = re.sub("\n+$", '', str_file)
             if elemtype == int:
@@ -241,6 +241,8 @@ class Bootstrap:
             else:
                 out = [x for x in str_file.split(sep)]
             return out
+        elif object is None:
+            return object
         
     @staticmethod
     def metrics(targs, h0_preds, h1_preds, h0_name='h0', h1_name='h1', verbose=False):
