@@ -193,9 +193,8 @@ class Bootstrap:
     def feed(self, h0, h1=None, exp_idx=None, preds=None, targs=None, idxs=None, epochs=None):
         targs = self.input2list(targs)
         preds = self.input2list(preds)
-        idxs = self.input2list(idxs)
-        assert len(preds) == len(targs), 'preds and targs have different length'
-        if idxs is not None: assert len(preds) == len(idxs), 'preds/targs and idxs have different length'
+        idxs = list(range(len(preds))) if idxs is None else self.input2list(idxs)
+        assert len(preds) == len(targs) == len(idxs), 'preds, targs or idxs have different length'
         if h1:
             self.data[h0]['h1'][h1]['exp_idxs'].append(exp_idx)
             self.data[h0]['h1'][h1]['preds'].append(preds)
@@ -242,7 +241,7 @@ class Bootstrap:
             else:
                 out = [x for x in str_file.split(sep)]
             return out
-        elif object is None:
+        else:
             return object
         
     @staticmethod
