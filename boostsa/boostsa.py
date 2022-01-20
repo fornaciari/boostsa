@@ -190,7 +190,7 @@ class Bootstrap:
                                                                     'idxs':     list(),
                                                                     'epochs':   list()})})
 
-    def feed(self, h0, h1=None, exp_idx=None, preds=None, targs=None, idxs=None, epochs=None):
+    def feed(self, h0, h1=None, exp_idx=None, preds=None, targs=None, idxs=None, epochs=()):
         targs = self.input2list(targs)
         preds = self.input2list(preds)
         idxs = list(range(len(preds))) if idxs is None else self.input2list(idxs)
@@ -200,13 +200,13 @@ class Bootstrap:
             self.data[h0]['h1'][h1]['preds'].append(preds)
             self.data[h0]['h1'][h1]['targs'].append(targs)
             self.data[h0]['h1'][h1]['idxs'].append(idxs)
-            self.data[h0]['h1'][h1]['epochs'].append(epochs)
+            self.data[h0]['h1'][h1]['epochs'].extend(epochs)
         else:
             self.data[h0]['exp_idxs'].append(exp_idx)
             self.data[h0]['preds'].append(preds)
             self.data[h0]['targs'].append(targs)
             self.data[h0]['idxs'].append(idxs)
-            self.data[h0]['epochs'].append(epochs)
+            self.data[h0]['epochs'].extend(epochs)
         return 1
 
     def loadjson(self, pathname):
@@ -245,7 +245,7 @@ class Bootstrap:
             return object
         
     @staticmethod
-    def metrics(targs, h0_preds, h1_preds, h0_name='h0', h1_name='h1', verbose=False):
+    def metrics(targs, h0_preds, h1_preds, h0_name='h0', h1_name='h1', targetclass=None, verbose=False):
         rounding_value = 2
         h0_acc  = round(accuracy_score(targs, h0_preds) * 100, rounding_value)
         h0_f1   = round(f1_score(targs, h0_preds, average='macro') * 100, rounding_value)
@@ -261,6 +261,29 @@ class Bootstrap:
         diff_f1   = round(h1_f1  - h0_f1, rounding_value)
         diff_prec = round(h1_prec - h0_prec, rounding_value)
         diff_rec  = round(h1_rec  - h0_rec, rounding_value)
+        df_tot = pd.DataFrame({'f1':    [h0_f1,       h1_f1],       'd_f1':    ['',  diff_f1],       's_f1':    ['', ''],
+                               'acc':   [h0_acc,      h1_acc],      'd_acc':   ['',  diff_acc],      's_acc':   ['', ''],
+                               'prec':  [h0_prec,     h1_prec],     'd_prec':  ['',  diff_prec],     's_prec':  ['', ''],
+                               'rec':   [h0_rec,      h1_rec],      'd_rec':   ['',  diff_rec],      's_rec':   ['', ''],
+                              }, index=[h0_name, h1_name])
+        df_tgt = pd.DataFrame(index=[h0_name, h1_name])
+        if targetclass is not None:
+            assert targetclass in set(targs), 'targetclass must belong to the classes\' set'
+            h0_vals = precision_recall_fscore_support(targs, h0_preds)
+            h1_vals = precision_recall_fscore_support(targs, h1_preds)
+            h0_tgt_prec   = round(h0_vals[0][targetclass] * 100, rounding_value)
+            h0_tgt_rec    = round(h0_vals[1][targetclass] * 100, rounding_value)
+            h0_tgt_f1     = round(h0_vals[2][targetclass] * 100, rounding_value)
+            h1_tgt_prec   = round(h1_vals[0][targetclass] * 100, rounding_value)
+            h1_tgt_rec    = round(h1_vals[1][targetclass] * 100, rounding_value)
+            h1_tgt_f1     = round(h1_vals[2][targetclass] * 100, rounding_value)
+            diff_tgt_f1   = round(h1_tgt_f1   - h0_tgt_f1,   rounding_value)
+            diff_tgt_prec = round(h1_tgt_prec - h0_tgt_prec, rounding_value)
+            diff_tgt_rec  = round(h1_tgt_rec  - h0_tgt_rec,  rounding_value)
+            df_tgt = pd.DataFrame({'tf1':   [h0_tgt_f1,   h1_tgt_f1],   'd_tf1':   ['',  diff_tgt_f1],   's_tf1':   ['', ''],
+                                   'tprec': [h0_tgt_prec, h1_tgt_prec], 'd_tprec': ['',  diff_tgt_prec], 's_tprec': ['', ''],
+                                   'trec':  [h0_tgt_rec,  h1_tgt_rec],  'd_trec':  ['',  diff_tgt_rec],  's_trec':  ['', ''],
+                                  }, index=[h0_name, h1_name])
         if verbose:
             h0_countpreds = Counter(h0_preds)
             h1_countpreds = Counter(h1_preds)
@@ -268,20 +291,21 @@ class Bootstrap:
             h0_countpreds = [f"class {tup[0]} freq {tup[1]} perc {tup[1] / len(h0_preds) * 100:.2f}%" for tup in sorted({k: h0_countpreds[k] for k in h0_countpreds}.items(), key=lambda item: item[0])]
             h1_countpreds = [f"class {tup[0]} freq {tup[1]} perc {tup[1] / len(h1_preds) * 100:.2f}%" for tup in sorted({k: h1_countpreds[k] for k in h1_countpreds}.items(), key=lambda item: item[0])]
             counttargs    = [f"class {tup[0]} freq {tup[1]} perc {tup[1] / len(targs) * 100:.2f}%" for tup in sorted({k: counttargs[k] for k in counttargs}.items(), key=lambda item: item[0])]
-            print(f"{'targs count:':<25} {counttargs}")
-            print(f"{h0_name + ' preds count:':<25} {h0_countpreds}")
-            print(f"{h1_name + ' preds count:':<25} {h1_countpreds}")
-            print(f"{h0_name + ' F-measure':.<25} {h0_f1:<7} {h1_name + ' F-measure':.<25} {h1_f1:<7} {'diff':.<7} {diff_f1}")
-            print(f"{h0_name + ' accuracy':.<25} {h0_acc:<7} {h1_name + ' accuracy':.<25} {h1_acc:<7} {'diff':.<7} {diff_acc}")
-            print(f"{h0_name + ' precision':.<25} {h0_prec:<7} {h1_name + ' precision':.<25} {h1_prec:<7} {'diff':.<7} {diff_prec}")
-            print(f"{h0_name + ' recall':.<25} {h0_rec:<7} {h1_name + ' recall':.<25} {h1_rec:<7} {'diff':.<7} {diff_rec}")
-        return pd.DataFrame({'f1':   [h0_f1,   h1_f1],   'diff_f1':   ['',  diff_f1],   'sign_f1':   ['', ''],
-                             'acc':  [h0_acc,  h1_acc],  'diff_acc':  ['',  diff_acc],  'sign_acc':  ['', ''],
-                             'prec': [h0_prec, h1_prec], 'diff_prec': ['',  diff_prec], 'sign_prec': ['', ''],
-                             'rec':  [h0_rec,  h1_rec],  'diff_rec':  ['',  diff_rec],  'sign_rec':  ['', ''],
-                             }, index=[h0_name, h1_name])
+            print(f"h0: {h0_name} - h1: {h1_name}")
+            print(f"{'targs count:':<15} {counttargs}")
+            print(f"{'h0 preds count:':<15} {h0_countpreds}")
+            print(f"{'h1 preds count:':<15} {h1_countpreds}")
+            print(f"{'h0 F-measure':.<25} {h0_f1:<7}{'h1 F-measure':.<25} {h1_f1:<7}{'diff':.<7} {diff_f1}")
+            print(f"{'h0 accuracy':.<25} {h0_acc:<7}{'h1 accuracy':.<25} {h1_acc:<7}{'diff':.<7} {diff_acc}")
+            print(f"{'h0 precision':.<25} {h0_prec:<7}{'h1 precision':.<25} {h1_prec:<7}{'diff':.<7} {diff_prec}")
+            print(f"{'h0 recall':.<25} {h0_rec:<7}{'h1 recall':.<25} {h1_rec:<7}{'diff':.<7} {diff_rec}")
+            if targetclass is not None:
+                print(f"{'h0 targetclass F-measure':.<25} {h0_tgt_f1:<7}{'h1 targetclass F-measure':.<25} {h1_tgt_f1:<7}{'diff':.<7} {diff_tgt_f1}")
+                print(f"{'h0 targetclass precision':.<25} {h0_tgt_prec:<7}{'h1 targetclass precision':.<25} {h1_tgt_prec:<7}{'diff':.<7} {diff_tgt_prec}")
+                print(f"{'h0 targetclass recall':.<25} {h0_tgt_rec:<7}{'h1 targetclass recall':.<25} {h1_tgt_rec:<7}{'diff':.<7} {diff_tgt_rec}")
+        return df_tot, df_tgt
 
-    def test(self, targs, h0_preds, h1_preds, h0_name='h0', h1_name='h1', n_loops=100, sample_size=.1, verbose=False):
+    def test(self, targs, h0_preds, h1_preds, h0_name='h0', h1_name='h1', n_loops=100, sample_size=.1, targetclass=None, verbose=False):
         assert .05 <= sample_size <= .5, 'sample_size must be between .05 and .5'
         targs    = self.input2list(targs)
         h0_preds = self.input2list(h0_preds)
@@ -292,43 +316,73 @@ class Bootstrap:
         targs    = np.array(targs)
         h0_preds = np.array(h0_preds)
         h1_preds = np.array(h1_preds)
-        df_tot = self.metrics(targs, h0_preds, h1_preds, h0_name=h0_name, h1_name=h1_name, verbose=verbose)
-        diff_acc  = df_tot.diff_acc[-1]
-        diff_f1   = df_tot.diff_f1[-1]
-        diff_prec = df_tot.diff_prec[-1]
-        diff_rec  = df_tot.diff_rec[-1]
+        df_tot, df_tgt = self.metrics(targs, h0_preds, h1_preds, h0_name=h0_name, h1_name=h1_name, targetclass=targetclass, verbose=verbose)
+        diff_acc  = df_tot.d_acc[-1]
+        diff_f1   = df_tot.d_f1[-1]
+        diff_prec = df_tot.d_prec[-1]
+        diff_rec  = df_tot.d_rec[-1]
         twice_diff_acc  = 0
         twice_diff_f1   = 0
         twice_diff_prec = 0
         twice_diff_rec  = 0
+        if targetclass is not None:
+            diff_tgt_f1   = df_tgt.d_tf1[-1]
+            diff_tgt_prec = df_tgt.d_tprec[-1]
+            diff_tgt_rec  = df_tgt.d_trec[-1]
+            twice_diff_tgt_f1   = 0
+            twice_diff_tgt_prec = 0
+            twice_diff_tgt_rec  = 0
         for _ in tqdm(range(n_loops), desc='bootstrap', ncols=80):
-            i_sample = np.random.choice(range(overall_size), size=sample_size, replace=False)
+            i_sample = np.random.choice(range(overall_size), size=sample_size, replace=True) # Berg-Kirkpatrick, p. 996: "with replacement"
             sample_h0_preds = h0_preds[i_sample]
             sample_h1_preds = h1_preds[i_sample]
             sample_targs    = targs[i_sample]
-            df_sample       = self.metrics(sample_targs, sample_h0_preds, sample_h1_preds)
-            if df_sample.diff_acc[-1]   > 2 * diff_acc:  twice_diff_acc  += 1
-            if df_sample.diff_f1[-1]    > 2 * diff_f1:   twice_diff_f1   += 1
-            if df_sample.diff_prec[-1]  > 2 * diff_prec: twice_diff_prec += 1
-            if df_sample.diff_rec[-1]   > 2 * diff_rec:  twice_diff_rec  += 1
-        sign_f1   = '**' if twice_diff_f1   / n_loops < 0.01 else '*' if twice_diff_f1   / n_loops < 0.05 else ''
-        sign_acc  = '**' if twice_diff_acc  / n_loops < 0.01 else '*' if twice_diff_acc  / n_loops < 0.05 else ''
-        sign_prec = '**' if twice_diff_prec / n_loops < 0.01 else '*' if twice_diff_prec / n_loops < 0.05 else ''
-        sign_rec  = '**' if twice_diff_rec  / n_loops < 0.01 else '*' if twice_diff_rec  / n_loops < 0.05 else ''
-        str_out = f"{'count sample diff f1   is twice tot diff f1':.<50} {twice_diff_f1:<5}/ {n_loops:<8}p < {round((twice_diff_f1 / n_loops), 4):<6} {bcolors.red}{sign_f1  }{bcolors.reset}\n" \
-                  f"{'count sample diff acc  is twice tot diff acc':.<50} {twice_diff_acc:<5}/ {n_loops:<8}p < {round((twice_diff_acc / n_loops), 4):<6} {bcolors.red}{sign_acc }{bcolors.reset}\n" \
-                  f"{'count sample diff prec is twice tot diff prec':.<50} {twice_diff_prec:<5}/ {n_loops:<8}p < {round((twice_diff_prec / n_loops), 4):<6} {bcolors.red}{sign_prec}{bcolors.reset}\n" \
-                  f"{'count sample diff rec  is twice tot diff rec ':.<50} {twice_diff_rec:<5}/ {n_loops:<8}p < {round((twice_diff_rec / n_loops), 4):<6} {bcolors.red}{sign_rec }{bcolors.reset}"
+            df_sample_tot, df_sample_tgt = self.metrics(sample_targs, sample_h0_preds, sample_h1_preds, targetclass=targetclass)
+            if df_sample_tot.d_acc[-1]   > 2 * diff_acc:  twice_diff_acc  += 1
+            if df_sample_tot.d_f1[-1]    > 2 * diff_f1:   twice_diff_f1   += 1
+            if df_sample_tot.d_prec[-1]  > 2 * diff_prec: twice_diff_prec += 1
+            if df_sample_tot.d_rec[-1]   > 2 * diff_rec:  twice_diff_rec  += 1
+            if targetclass is not None:
+                if df_sample_tgt.d_tf1[-1]    > 2 * diff_tgt_f1:   twice_diff_tgt_f1   += 1
+                if df_sample_tgt.d_tprec[-1]  > 2 * diff_tgt_prec: twice_diff_tgt_prec += 1
+                if df_sample_tgt.d_trec[-1]   > 2 * diff_tgt_rec:  twice_diff_tgt_rec  += 1
+
+        col_sign_f1   = f"{bcolors.red}**{bcolors.reset}" if twice_diff_f1   / n_loops < 0.01 else f"{bcolors.red}*{bcolors.reset}" if twice_diff_f1   / n_loops < 0.05 else f"{bcolors.grey}!{bcolors.reset}" if twice_diff_f1   / n_loops > 0.95 else f"{bcolors.grey}!!{bcolors.reset}" if twice_diff_f1   / n_loops > 0.99 else ''
+        col_sign_acc  = f"{bcolors.red}**{bcolors.reset}" if twice_diff_acc  / n_loops < 0.01 else f"{bcolors.red}*{bcolors.reset}" if twice_diff_acc  / n_loops < 0.05 else f"{bcolors.grey}!{bcolors.reset}" if twice_diff_acc  / n_loops > 0.95 else f"{bcolors.grey}!!{bcolors.reset}" if twice_diff_acc  / n_loops > 0.99 else ''
+        col_sign_prec = f"{bcolors.red}**{bcolors.reset}" if twice_diff_prec / n_loops < 0.01 else f"{bcolors.red}*{bcolors.reset}" if twice_diff_prec / n_loops < 0.05 else f"{bcolors.grey}!{bcolors.reset}" if twice_diff_prec / n_loops > 0.95 else f"{bcolors.grey}!!{bcolors.reset}" if twice_diff_prec / n_loops > 0.99 else ''
+        col_sign_rec  = f"{bcolors.red}**{bcolors.reset}" if twice_diff_rec  / n_loops < 0.01 else f"{bcolors.red}*{bcolors.reset}" if twice_diff_rec  / n_loops < 0.05 else f"{bcolors.grey}!{bcolors.reset}" if twice_diff_rec  / n_loops > 0.95 else f"{bcolors.grey}!!{bcolors.reset}" if twice_diff_rec  / n_loops > 0.99 else ''
+        sign_f1   = "**" if twice_diff_f1   / n_loops < 0.01 else "*" if twice_diff_f1   / n_loops < 0.05 else "!" if twice_diff_f1   / n_loops > 0.95 else "!!" if twice_diff_f1   / n_loops > 0.99 else ''
+        sign_acc  = "**" if twice_diff_acc  / n_loops < 0.01 else "*" if twice_diff_acc  / n_loops < 0.05 else "!" if twice_diff_acc  / n_loops > 0.95 else "!!" if twice_diff_acc  / n_loops > 0.99 else ''
+        sign_prec = "**" if twice_diff_prec / n_loops < 0.01 else "*" if twice_diff_prec / n_loops < 0.05 else "!" if twice_diff_prec / n_loops > 0.95 else "!!" if twice_diff_prec / n_loops > 0.99 else ''
+        sign_rec  = "**" if twice_diff_rec  / n_loops < 0.01 else "*" if twice_diff_rec  / n_loops < 0.05 else "!" if twice_diff_rec  / n_loops > 0.95 else "!!" if twice_diff_rec  / n_loops > 0.99 else ''
+        str_out = f"{'count sample diff f1   is twice tot diff f1':.<60} {twice_diff_f1:<5}/ {n_loops:<8}p < {round((twice_diff_f1 / n_loops), 4):<6} {col_sign_f1}\n" \
+                  f"{'count sample diff acc  is twice tot diff acc':.<60} {twice_diff_acc:<5}/ {n_loops:<8}p < {round((twice_diff_acc / n_loops), 4):<6} {col_sign_acc }\n" \
+                  f"{'count sample diff prec is twice tot diff prec':.<60} {twice_diff_prec:<5}/ {n_loops:<8}p < {round((twice_diff_prec / n_loops), 4):<6} {col_sign_prec}\n" \
+                  f"{'count sample diff rec  is twice tot diff rec ':.<60} {twice_diff_rec:<5}/ {n_loops:<8}p < {round((twice_diff_rec / n_loops), 4):<6} {col_sign_rec }"
+        df_tot.s_f1   = ['', sign_f1]
+        df_tot.s_acc  = ['', sign_acc]
+        df_tot.s_prec = ['', sign_prec]
+        df_tot.s_rec  = ['', sign_rec]
+        if targetclass is not None:
+            col_sign_tgt_f1   = f"{bcolors.red}**{bcolors.reset}" if twice_diff_tgt_f1   / n_loops < 0.01 else f"{bcolors.red}*{bcolors.reset}" if twice_diff_tgt_f1   / n_loops < 0.05 else f"{bcolors.grey}!{bcolors.reset}" if twice_diff_tgt_f1   / n_loops > 0.95 else f"{bcolors.grey}!!{bcolors.reset}" if twice_diff_tgt_f1   / n_loops > 0.99 else ''
+            col_sign_tgt_prec = f"{bcolors.red}**{bcolors.reset}" if twice_diff_tgt_prec / n_loops < 0.01 else f"{bcolors.red}*{bcolors.reset}" if twice_diff_tgt_prec / n_loops < 0.05 else f"{bcolors.grey}!{bcolors.reset}" if twice_diff_tgt_prec / n_loops > 0.95 else f"{bcolors.grey}!!{bcolors.reset}" if twice_diff_tgt_prec / n_loops > 0.99 else ''
+            col_sign_tgt_rec  = f"{bcolors.red}**{bcolors.reset}" if twice_diff_tgt_rec  / n_loops < 0.01 else f"{bcolors.red}*{bcolors.reset}" if twice_diff_tgt_rec  / n_loops < 0.05 else f"{bcolors.grey}!{bcolors.reset}" if twice_diff_tgt_rec  / n_loops > 0.95 else f"{bcolors.grey}!!{bcolors.reset}" if twice_diff_tgt_rec  / n_loops > 0.99 else ''
+            sign_tgt_f1   = "**" if twice_diff_tgt_f1   / n_loops < 0.01 else "*" if twice_diff_tgt_f1   / n_loops < 0.05 else "!" if twice_diff_tgt_f1   / n_loops > 0.95 else "!!" if twice_diff_tgt_f1   / n_loops > 0.99 else ''
+            sign_tgt_prec = "**" if twice_diff_tgt_prec / n_loops < 0.01 else "*" if twice_diff_tgt_prec / n_loops < 0.05 else "!" if twice_diff_tgt_prec / n_loops > 0.95 else "!!" if twice_diff_tgt_prec / n_loops > 0.99 else ''
+            sign_tgt_rec  = "**" if twice_diff_tgt_rec  / n_loops < 0.01 else "*" if twice_diff_tgt_rec  / n_loops < 0.05 else "!" if twice_diff_tgt_rec  / n_loops > 0.95 else "!!" if twice_diff_tgt_rec  / n_loops > 0.99 else ''
+            str_out += f"\n{'count sample diff targetclass f1   is twice tot diff f1':.<60} {twice_diff_tgt_f1:<5}/ {n_loops:<8}p < {round((twice_diff_tgt_f1 / n_loops), 4):<6} {col_sign_tgt_f1}\n" \
+                         f"{'count sample diff targetclass prec is twice tot diff prec':.<60} {twice_diff_tgt_prec:<5}/ {n_loops:<8}p < {round((twice_diff_tgt_prec / n_loops), 4):<6} {col_sign_tgt_prec}\n" \
+                         f"{'count sample diff targetclass rec  is twice tot diff rec ':.<60} {twice_diff_tgt_rec:<5}/ {n_loops:<8}p < {round((twice_diff_tgt_rec / n_loops), 4):<6} {col_sign_tgt_rec }"
+            df_tgt.s_tf1   = ['', sign_tgt_f1]
+            df_tgt.s_tprec = ['', sign_tgt_prec]
+            df_tgt.s_trec  = ['', sign_tgt_rec]
         print(str_out)
-        df_tot.sign_f1   = ['', sign_f1]
-        df_tot.sign_acc  = ['', sign_acc]
-        df_tot.sign_prec = ['', sign_prec]
-        df_tot.sign_rec  = ['', sign_rec]
         if self.savetsv:
             df_tot.to_csv(f"{self.dirout}results.tsv")
-        return df_tot
+            df_tgt.to_csv(f"{self.dirout}results_targetclass.tsv")
+        return df_tot, df_tgt
 
-    def run(self, n_loops=100, sample_size=.1, verbose=False):
+    def run(self, n_loops=100, sample_size=.1, targetclass=None, verbose=False):
         """
         :param data:
                 defaultdict(lambda: {'exp_idxs': list(), 'preds': list(), 'targs': list(), 'idxs': list(), 'epochs': list(),
@@ -336,49 +390,73 @@ class Bootstrap:
         """
         startime = start()
 
-        df = pd.DataFrame(columns="mean_epochs acc diff_acc sign_acc prec diff_prec sign_prec rec diff_rec sign_rec f1 diff_f1 sign_f1".split())
+        df_tot = pd.DataFrame(columns="mean_epochs acc d_acc s_acc prec d_prec s_prec rec d_rec s_rec f1 std_f1 d_f1 s_f1".split())
+        df_tgt = pd.DataFrame(columns="mean_epochs tprec d_tprec s_tprec trec d_trec s_trec tf1 std_tf1 d_tf1 s_tf1".split())
         for h0_cond in self.data:
             print('#'*80)
-            h0_preds_all, h0_targs_all, h0_idxs_all = list(), list(), list()
+            h0_preds_all, h0_targs_all, h0_idxs_all, h0_f1_all, h0_f1tgt_all = list(), list(), list(), list(), list()
             for exp_idx, preds, targs, idxs in zip(self.data[h0_cond]['exp_idxs'], self.data[h0_cond]['preds'], self.data[h0_cond]['targs'], self.data[h0_cond]['idxs']):
-                acc = round(accuracy_score(targs, preds) * 100, 2)
-                f1  = round(f1_score(targs, preds, average='macro') * 100, 2)
+                f1 = f1_score(targs, preds, average='macro')
                 h0_preds_all.extend(preds)
                 h0_targs_all.extend(targs)
                 h0_idxs_all.extend(idxs)
-                if verbose:  print(f"{exp_idx:<60} acc {acc:<7} F {f1}")
+                h0_f1_all.append(f1)
+                if targetclass is not None:
+                    h0_f1tgt_all.append(precision_recall_fscore_support(targs, preds)[2][targetclass])
+                if verbose:
+                    print(f"{exp_idx:<60} F1 {f1}")
             for h1_cond in self.data[h0_cond]['h1']:
                 print(f"{'#'*80}\n{h0_cond}   vs   {h1_cond}")
-                h1_preds_all, h1_targs_all, h1_idxs_all = list(), list(), list()
+                h1_preds_all, h1_targs_all, h1_idxs_all, h1_f1_all, h1_f1tgt_all = list(), list(), list(), list(), list()
                 for exp_idx, preds, targs, idxs in zip(self.data[h0_cond]['h1'][h1_cond]['exp_idxs'],
                                                        self.data[h0_cond]['h1'][h1_cond]['preds'],
                                                        self.data[h0_cond]['h1'][h1_cond]['targs'],
                                                        self.data[h0_cond]['h1'][h1_cond]['idxs']):
-                    acc = round(accuracy_score(targs, preds) * 100, 2)
-                    f1  = round(f1_score(targs, preds, average='macro') * 100, 2)
+                    f1 = f1_score(targs, preds, average='macro')
                     h1_preds_all.extend(preds)
                     h1_targs_all.extend(targs)
                     h1_idxs_all.extend(idxs)
-                    if verbose: print(f"{exp_idx:<60} acc {acc:<7} F {f1}")
+                    h1_f1_all.append(f1)
+                    if targetclass is not None:
+                        h1_f1tgt_all.append(precision_recall_fscore_support(targs, preds)[2][targetclass])
+                    if verbose:
+                        print(f"{exp_idx:<60} F1 {f1}")
                 # print(len(h0_targs_all), len(h1_targs_all), h0_targs_all[:7], h1_targs_all[:7])
                 assert h0_targs_all == h1_targs_all, 'h0 and h1 targets differ'
                 assert h0_idxs_all == h1_idxs_all, 'h0 and h1 idxs differ'
                 targs_all = h0_targs_all
                 
-                df_out = self.test(targs_all, h0_preds_all, h1_preds_all, h0_name=h0_cond, h1_name=h1_cond, n_loops=n_loops, sample_size=sample_size, verbose=True)
-                df_out['mean_epochs'] = [round(np.mean(self.data[h0_cond]['epochs']), 2), round(np.mean(self.data[h0_cond]['h1'][h1_cond]['epochs']), 2)] if ((self.data[h0_cond]['epochs'][0] is not None) and (self.data[h0_cond]['h1'][h1_cond]['epochs'][0] is not None)) else [None, None]
+                df_tot_cond, df_tgt_cond = self.test(targs_all, h0_preds_all, h1_preds_all, h0_name=h0_cond, h1_name=h1_cond, n_loops=n_loops, sample_size=sample_size, targetclass=targetclass, verbose=True)
+                df_tot_cond['mean_epochs'] = [round(np.mean(self.data[h0_cond]['epochs']), 2), round(np.mean(self.data[h0_cond]['h1'][h1_cond]['epochs']), 2)]
+                df_tot_cond['std_f1']      = [round(np.std(h0_f1_all), 2), round(np.std(h1_f1_all), 2)]
+                # print(f"{bcolors.green}{self.data[h0_cond]['epochs']} {np.mean(self.data[h0_cond]['epochs'])}\n{h0_f1_all} {np.std(h0_f1_all)}{bcolors.reset}")
+                # print(f"{bcolors.pink}{self.data[h0_cond]['h1'][h1_cond]['epochs']} {np.mean(self.data[h0_cond]['h1'][h1_cond]['epochs'])}\n{h1_f1_all} {np.std(h1_f1_all)}{bcolors.reset}")
+                if h0_cond not in df_tot.index:
+                    df_tot = df_tot.append(df_tot_cond.iloc[0, :])
+                if h1_cond not in df_tot.index:
+                    df_tot = df_tot.append(df_tot_cond.iloc[1, :])
 
-                if h0_cond not in df.index:
-                    df = df.append(df_out.iloc[0, :])
-                if h1_cond not in df.index:
-                    df = df.append(df_out.iloc[1, :])
-        if self.savetsv:
-            df.to_csv(f"{self.dirout}results.tsv")
+                if targetclass is not None:
+                    df_tgt_cond['mean_epochs'] = [round(np.mean(self.data[h0_cond]['epochs']), 2), round(np.mean(self.data[h0_cond]['h1'][h1_cond]['epochs']), 2)]
+                    df_tgt_cond['std_tf1']      = [round(np.std(h0_f1tgt_all), 2), round(np.std(h1_f1tgt_all), 2)]
+                    if h0_cond not in df_tgt.index:
+                        df_tgt = df_tgt.append(df_tgt_cond.iloc[0, :])
+                    if h1_cond not in df_tgt.index:
+                        df_tgt = df_tgt.append(df_tgt_cond.iloc[1, :])
         if self.savejson:
             writejson(self.data, f"{self.dirout}outcomes.json")
-        print(df.to_string())
+        if self.savetsv:
+            df_tot.to_csv(f"{self.dirout}results.tsv")
+        if targetclass is not None:
+            df_both = pd.concat([df_tot, df_tgt.iloc[:, 1:]], axis=1)
+            print(df_both.to_string())
+            if self.savetsv:
+                df_tgt.to_csv(f"{self.dirout}results_targetclass.tsv")
+                df_both.to_csv(f"{self.dirout}results_overall.tsv")
+        else:
+            print(df_tot.to_string())
         end(startime)
-        return df
+        return df_tot, df_tgt
 
 
 
