@@ -49,7 +49,7 @@ First, import ``boostsa``:
 
     from boostsa import Bootstrap
 
-Then, create a boostrap instance. You will use it to store your experiments' results and to compute the bootstrap sampling significance test:
+Then create a boostrap instance. You will use it to store your experiments' results and to compute the bootstrap sampling significance test:
 
 .. code-block:: python
 
