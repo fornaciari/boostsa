@@ -10,7 +10,7 @@ Development Lead
 Contributors
 ------------
 
-None yet. Why not be the first?
+* Alexandra Nnemamaka Uma <a.n.uma@qmul.ac.uk>
 
 Acknowledgements
 ----------------

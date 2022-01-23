@@ -21,11 +21,11 @@ import sphinx_rtd_theme
 # -- Project information -----------------------------------------------------
 
 project = 'boostsa'
-copyright = '2021, Tommaso Fornaciari'
+copyright = '2022, Tommaso Fornaciari'
 author = 'Tommaso Fornaciari'
 
 # The full version, including alpha/beta/rc tags
-release = '0.1.10'
+release = '0.2.1'
 
 
 # -- General configuration ---------------------------------------------------
