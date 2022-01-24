@@ -24,15 +24,15 @@ even in the pipeline of a complex experimental design.
 The significance test is carried out considring the following metrics, computed by boostsa:
 
 - For hard-labels:
-    - F-measure;
-    - Precision;
-    - Recall;
-    - Accuracy.
+ - F-measure;
+ - Precision;
+ - Recall;
+ - Accuracy.
 - For Soft labels:
-    - Cross-entropy;
-    - Jensen-Shannon divergence;
-    - Entropy similarity;
-    - Entropy correlation.
+ - Cross-entropy;
+ - Jensen-Shannon divergence;
+ - Entropy similarity;
+ - Entropy correlation.
 
 For the theoretical aspects of Bootstrap sampling, please refer to the following papers:
 
@@ -131,10 +131,10 @@ It takes the following inputs:
     - A 1D or 1-column ``numpy.array`` will be considered as containing integers for hard-labels.
     - A 2D ``numpy.array`` will be treated as containing float numbers constituting a soft-label in each row.
     - The ``str`` input will be processed as a full path to a file, which will have to comply with the following rules:
-        - A file with extension '.txt' has to contain an integer in each row, representing hard classes' indexes.
-        - A file with extension '.csv' has to contain comma-separated values for soft-labels.
-        - A file with extension '.tsv' has to contain tab-separated values for soft-labels.
-        - A file with extension '.npy' has to contain a NumPy binary file (either for hard and soft-labels).
+     - A file with extension '.txt' has to contain an integer in each row, representing hard classes' indexes.
+     - A file with extension '.csv' has to contain comma-separated values for soft-labels.
+     - A file with extension '.tsv' has to contain tab-separated values for soft-labels.
+     - A file with extension '.npy' has to contain a NumPy binary file (either for hard and soft-labels).
 - ``h0_preds``, type: ``list``, ``numpy.array`` or ``str``. The *h0* predictions, in the same formats of ``targs``.
 - ``h1_preds``, type: ``list``, ``numpy.array`` or ``str``. The *h1* predictions, in the same formats as above.
 - ``h0_name``, type: ``str``, default: ``h0``. Expression to describe the *h0* condition.
