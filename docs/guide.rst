@@ -125,8 +125,7 @@ Test function
 
 In the simplest conditions, you will run the bootstrap sampling significance test with the ``test`` function.
 It takes the following inputs:
-
-- ``targs``, type: ``list``, ``numpy.array`` or ``str``. They are the targets, or test set, that you use as benchmark to measure the *h0* and *h1* predictions' performance. Boostsa automatically infers from the input shape if hard or soft-labels are provided, according to these cases::
+- ``targs``, type: ``list``, ``numpy.array`` or ``str``. They are the targets, or test set, that you use as benchmark to measure the *h0* and *h1* predictions' performance. Boostsa automatically infers from the input shape if hard or soft-labels are provided, according to these cases:
     - A simple ``list` will be assumed to be a list of integers, each corresponding to hard classes' indexes.
     - A ``list`` of ``list``s will be assumed to contain in each sub-list, as a row in a 2D matrix, float numbers summing up to one, which will be treated as soft labels.
     - A 1D or 1-column ``numpy.array`` will be considered as containing integers for hard-labels.
