@@ -58,7 +58,7 @@ Tutorials
 
 You can also look at our Colab Tutorials:
 
-.. |colab1_2| image:: https://colab.research.google.com/assets/colab-badge.svg
+.. image:: https://colab.research.google.com/assets/colab-badge.svg
     :target: https://colab.research.google.com/drive/1pkbjouxjub9ve0PlVZaW_we_r1hz6Hf-#scrollTo=TGj4udXVb6Ji
     :alt: Open In Colab
 
