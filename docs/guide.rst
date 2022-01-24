@@ -21,6 +21,19 @@ Intro
 boostsa - BOOtSTrap SAmpinlg - is a tool to compute bootstrap sampling significance test,
 even in the pipeline of a complex experimental design.
 
+The significance test is carried out considring the following metrics, computed by boostsa:
+
+- For hard-labels:
+    - F-measure;
+    - Precision;
+    - Recall;
+    - Accuracy.
+- For Soft labels:
+    - Cross-entropy;
+    - Jensen-Shannon divergence;
+    - Entropy similarity;
+    - Entropy correlation.
+
 For the theoretical aspects of Bootstrap sampling, please refer to the following papers:
 
  `Berg-Kirkpatrick, T., Burkett, D. & Klein, D. (2012, July).
@@ -31,7 +44,23 @@ For the theoretical aspects of Bootstrap sampling, please refer to the following
  *What’s in a p-value in NLP?*.
  In Proceedings of the eighteenth conference on computational natural language learning (pp. 1-10). <https://www.aclweb.org/anthology/W14-1601.pdf>`_
 
+For the metrics for soft-labels:
+
+ `Uma, A., Fornaciari, T., Hovy, D., Paun, S., Plank, B., & Poesio, M. (2021).
+ *Learning from disagreement: A survey*.
+ Journal of Artificial Intelligence Research, 72:1385–1470. <https://dl.acm.org/doi/pdf/10.1613/jair.1.12752>`_
+
+
 See also :ref:`tethics`.
+
+Tutorials
+---------
+
+You can also look at our Colab Tutorials:
+
+.. |colab1_2| image:: https://colab.research.google.com/assets/colab-badge.svg
+    :target: https://colab.research.google.com/azz
+    :alt: Open In Colab
 
 Installation
 ------------
@@ -97,13 +126,23 @@ Test function
 In the simplest conditions, you will run the bootstrap sampling significance test with the ``test`` function.
 It takes the following inputs:
 
-- ``targs``, type: ``list`` or ``str``. They are the targets, or *gold standard*, that you use as benchmark to measure the *h0* and *h1* predictions' performance. They can be a **list of integers**, representing the labels' indexes for each data point, or a string. In such case, the string will be interpreted as the **path** to a text file containing a single integer in each row, having the same meaning as for the list input.
-- ``h0_preds``, type: ``list`` or ``str``. The *h0* predictions, in the same formats of ``targs``.
-- ``h1_preds``, type: ``list`` or ``str``. The *h1* predictions, in the same formats as above.
+- ``targs``, type: ``list``, ``numpy.array`` or ``str``. They are the targets, or test set, that you use as benchmark to measure the *h0* and *h1* predictions' performance. Boostsa automatically infers from the input shape if hard or soft-labels are provided, according to these cases::
+    - A simple ``list` will be assumed to be a list of integers, each corresponding to hard classes' indexes.
+    - A ``list`` of ``list``s will be assumed to contain in each sub-list, as a row in a 2D matrix, float numbers summing up to one, which will be treated as soft labels.
+    - A 1D or 1-column ``numpy.array`` will be considered as containing integers for hard-labels.
+    - A 2D ``numpy.array`` will be treated as containing float numbers constituting a soft-label in each row.
+    - The ``str`` input will be processed as a full path to a file, which will have to comply with the following rules:
+        - A file with extension '.txt' has to contain an integer in each row, representing hard classes' indexes.
+        - A file with extension '.csv' has to contain comma-separated values for soft-labels.
+        - A file with extension '.tsv' has to contain tab-separated values for soft-labels.
+        - A file with extension '.npy' has to contain a NumPy binary file (either for hard and soft-labels).
+- ``h0_preds``, type: ``list``, ``numpy.array`` or ``str``. The *h0* predictions, in the same formats of ``targs``.
+- ``h1_preds``, type: ``list``, ``numpy.array`` or ``str``. The *h1* predictions, in the same formats as above.
 - ``h0_name``, type: ``str``, default: ``h0``. Expression to describe the *h0* condition.
 - ``h1_name``, type: ``str``, default: ``h1``. Expression to describe the *h1* condition.
-- ``n_loops``, type: ``int``, default: ``100``. Number of iterations for computing the bootstrap sampling.
+- ``n_loops``, type: ``int``, default: ``1000``. Number of iterations for computing the bootstrap sampling.
 - ``sample_size``, type: ``float``, default: ``.1``. Percentage of data points sampled, with respect to their whole set. The admitted values range between 0.05 (5%) and 0.5 (50%).
+- ``targetclass``, type: ``int``, default: ``None``. If provided, it is interpreted as a label index, and boostsa will provide performance and significance levels with respect to that class.
 - ``verbose``, type: ``bool``, default: ``False``. If true, the experiments' performance is shown.
 
 For example:
@@ -154,15 +193,16 @@ The ``feed`` function takes the following inputs:
 - ``h0``, type: ``str``. This is an expression that gives a name to the *h0* experiment. It must be provided both for the *h0* experiments, and for the *h>0* experiments which have to be compared with that *h0* condition.
 - ``h1``, type: ``str``, default: ``None``. This is an expression that gives a name to the *h>0* experiment.
 - ``exp_idx``, type: ``str``, default: ``None``. This is an expression that identifies the single experiment, in case multiple experiments are carried out within the same experimental condition. It could contain, for example, the directory containing the outputs of such experiments.
-- ``targs``, type: ``list`` or ``str``. Similarly to the ``test`` function, they are the targets and can be a **list of integers**, representing the labels' indexes for each data point, or a string. In such case, the string will be interpreted as the **path** to a text file containing a single integer in each row.
-- ``preds``, type: ``list`` or ``str``. The predictions, in the same formats of ``targs``.
-- ``idxs``, type: ``list`` or ``str``. Similar to the other inputs, it can be a list or a string representing the path to a file containing an integer number in each row. During the training, you could have shuffled your data points. The data points order does not affect the bootstrap sampling, but you could want to store the shuffled indexes, to link your predictions to your original data points in a second moment. You can provide these indexes to this parameter.
+- ``targs``, type: ``list``, ``numpy.array`` or ``str``. Similar to the inputs in the ``test`` function.
+- ``preds``, type: ``list``, ``numpy.array`` or ``str``. The predictions, in the same formats of ``targs``.
+- ``idxs``, type: ``list``, ``numpy.array`` or ``str``. Similar to the other inputs, it can be a list or a string representing the path to a file containing an integer number in each row. During the training, you could have shuffled your data points. The data points order does not affect the bootstrap sampling, but you could want to store the shuffled indexes, to link your predictions to your original data points in a second moment. You can provide these indexes to this parameter.
 - ``epochs``, type:``int``. This is an integer number, corresponding to the number of epochs of the experiment. This variable will be included in the bootstrap outputs. In case of multiple experiments for experimental condition, with early stopping at different epochs, the average will be reported.
 
 The ``run`` function takes the three inputs:
 
 - ``n_loops``, type: ``int``, default: ``100``. Number of iterations for computing the bootstrap sampling.
 - ``sample_size``, type: ``float``, default: ``.1``. Percentage of data points sampled, with respect to their whole set. The admitted values range between 0.05 (5%) and 0.5 (50%).
+- ``targetclass``, type: ``int``, default: ``None``. If provided, it is interpreted as a label index, and boostsa will provide performance and significance levels with respect to that class.
 - ``verbose``, type: ``bool``, default: ``False``. If true, the experiments' performance is shown.
 
 This is an example of these functions' use:
