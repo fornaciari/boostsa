@@ -15,7 +15,7 @@ with open('requirements.txt') as f:
 
 setup(
     name="boostsa",
-    version="0.2.3",
+    version="0.2.4",
     author="Tommaso Fornaciari",
     author_email="fornaciari@unibocconi.it",
     description="A package to compute bootstrap sampling significance test",
