@@ -415,26 +415,6 @@ class Bootstrap:
                 print(f"{'entropy correlation:':<26} - h0: {h0_cor:<7.4f} - h1: {h1_cor:<7.4f} - diff: {diff_cor:.4f}")
 
             df_tgt = pd.DataFrame(index=[h0_name, h1_name])
-            if targetclass is not None:
-                assert targetclass in list(range(targs.shape[1])), 'targetclass must belong to the classes\' set'
-                h0_tgt_jsd = np.mean(jensenshannon(targs[:, targetclass].reshape(1, -1), h0_preds[:, targetclass].reshape(1, -1), axis=1))
-                h1_tgt_jsd = np.mean(jensenshannon(targs[:, targetclass].reshape(1, -1), h1_preds[:, targetclass].reshape(1, -1), axis=1))
-
-                h0_tgt_ce   = self.crossentropy_mean(targs[:, targetclass].reshape(-1, 1), h0_preds[:, targetclass].reshape(-1, 1))
-                h1_tgt_ce   = self.crossentropy_mean(targs[:, targetclass].reshape(-1, 1), h1_preds[:, targetclass].reshape(-1, 1))
-
-                diff_tgt_jsd = h1_tgt_jsd - h0_tgt_jsd
-                diff_tgt_ce  = h1_tgt_ce  - h0_tgt_ce
-
-                df_tgt = pd.DataFrame({ 'tjsd': [h0_tgt_jsd, h1_tgt_jsd], 'd_tjsd': ['',  diff_tgt_jsd], 's_tjsd': ['', ''],
-                                        'tce':  [h0_tgt_ce,  h1_tgt_ce],  'd_tce':  ['',  diff_tgt_ce],  's_tce':  ['', ''],
-                                        'mean_epochs': [None, None]
-                                        }, index=[h0_name, h1_name])
-                df_tgt = df_tgt['mean_epochs tjsd d_tjsd s_tjsd tce d_tce s_tce'.split()]
-                if verbose:
-                    print(f"target {targetclass} {'Jensen-Shannon divergence:':<26} - h0: {h0_tgt_jsd:<7.4f} - h1: {h1_tgt_jsd:<7.4f} - diff: {diff_tgt_jsd:.4f}")
-                    print(f"target {targetclass} {'cross-entropy:':<26} - h0: {h0_tgt_ce:<7.4f} - h1: {h1_tgt_ce:<7.4f} - diff: {diff_tgt_ce:.4f}")
-
             return df_tot, df_tgt
 
     def test(self, targs, h0_preds, h1_preds, h0_name='h0', h1_name='h1', n_loops=1000, sample_size=.1, targetclass=None, verbose=False):
@@ -541,11 +521,6 @@ class Bootstrap:
             twice_diff_sim = 0
             twice_diff_cor = 0
             diff_tgt_jsd, diff_tgt_ce, twice_diff_tgt_jsd, twice_diff_tgt_ce = None, None, None, None
-            if targetclass is not None:
-                diff_tgt_jsd = df_tgt.d_tjsd[-1]
-                diff_tgt_ce  = df_tgt.d_tce[-1]
-                twice_diff_tgt_jsd = 0
-                twice_diff_tgt_ce  = 0
             for _ in tqdm(range(n_loops), desc='bootstrap', ncols=80):
                 i_sample = np.random.choice(range(targs.shape[0]), size=sample_size, replace=True) # Berg-Kirkpatrick, p. 996: "with replacement"
                 sample_targs    = targs[i_sample]
@@ -556,9 +531,6 @@ class Bootstrap:
                 if df_sample_tot.d_ce[-1]   > -2 * diff_ce:  twice_diff_ce   += 1 # lower is better
                 if df_sample_tot.d_sim[-1]  > 2 * diff_sim: twice_diff_sim += 1
                 if df_sample_tot.d_cor[-1]  > 2 * diff_cor: twice_diff_cor += 1
-                if targetclass is not None:
-                    if df_sample_tgt.d_tjsd[-1] > -2 * diff_tgt_jsd: twice_diff_tgt_jsd += 1 # lower is better
-                    if df_sample_tgt.d_tce[-1]  > -2 * diff_tgt_ce:  twice_diff_tgt_ce  += 1 # lower is better
             col_sign_jsd = f"{BColor.red}**{BColor.reset}" if twice_diff_jsd / n_loops < 0.01 else f"{BColor.red}*{BColor.reset}" if twice_diff_jsd / n_loops < 0.05 else f"{BColor.grey}!{BColor.reset}" if twice_diff_jsd / n_loops > 0.95 else f"{BColor.grey}!!{BColor.reset}" if twice_diff_jsd / n_loops > 0.99 else ''
             col_sign_ce  = f"{BColor.red}**{BColor.reset}" if twice_diff_ce  / n_loops < 0.01 else f"{BColor.red}*{BColor.reset}" if twice_diff_ce  / n_loops < 0.05 else f"{BColor.grey}!{BColor.reset}" if twice_diff_ce  / n_loops > 0.95 else f"{BColor.grey}!!{BColor.reset}" if twice_diff_ce  / n_loops > 0.99 else ''
             col_sign_sim = f"{BColor.red}**{BColor.reset}" if twice_diff_sim / n_loops < 0.01 else f"{BColor.red}*{BColor.reset}" if twice_diff_sim / n_loops < 0.05 else f"{BColor.grey}!{BColor.reset}" if twice_diff_sim / n_loops > 0.95 else f"{BColor.grey}!!{BColor.reset}" if twice_diff_sim / n_loops > 0.99 else ''
@@ -575,19 +547,9 @@ class Bootstrap:
             df_tot.s_ce  = ['', sign_ce]
             df_tot.s_sim = ['', sign_sim]
             df_tot.s_cor = ['', sign_cor]
-            if targetclass is not None:
-                col_sign_tgt_jsd = f"{BColor.red}**{BColor.reset}" if twice_diff_tgt_jsd / n_loops < 0.01 else f"{BColor.red}*{BColor.reset}" if twice_diff_tgt_jsd / n_loops < 0.05 else f"{BColor.grey}!{BColor.reset}" if twice_diff_tgt_jsd / n_loops > 0.95 else f"{BColor.grey}!!{BColor.reset}" if twice_diff_tgt_jsd / n_loops > 0.99 else ''
-                col_sign_tgt_ce  = f"{BColor.red}**{BColor.reset}" if twice_diff_tgt_ce  / n_loops < 0.01 else f"{BColor.red}*{BColor.reset}" if twice_diff_tgt_ce  / n_loops < 0.05 else f"{BColor.grey}!{BColor.reset}" if twice_diff_tgt_ce  / n_loops > 0.95 else f"{BColor.grey}!!{BColor.reset}" if twice_diff_tgt_ce  / n_loops > 0.99 else ''
-                sign_tgt_jsd = "**" if twice_diff_tgt_jsd / n_loops < 0.01 else "*" if twice_diff_tgt_jsd / n_loops < 0.05 else "!" if twice_diff_tgt_jsd / n_loops > 0.95 else "!!" if twice_diff_tgt_jsd / n_loops > 0.99 else ''
-                sign_tgt_ce  = "**" if twice_diff_tgt_ce  / n_loops < 0.01 else "*" if twice_diff_tgt_ce  / n_loops < 0.05 else "!" if twice_diff_tgt_ce  / n_loops > 0.95 else "!!" if twice_diff_tgt_ce  / n_loops > 0.99 else ''
-                str_out += f"\ntarget {targetclass} {'count sample diff jsd is twice tot diff jsd':.<50} {twice_diff_tgt_jsd:<5}/ {n_loops:<8}p < {round((twice_diff_tgt_jsd / n_loops), 4):<6} {col_sign_tgt_jsd}\n" \
-                             f"target {targetclass} {'count sample diff ce  is twice tot diff ce':.<50} {twice_diff_tgt_ce:<5}/ {n_loops:<8}p < {round((twice_diff_tgt_ce / n_loops), 4):<6} {col_sign_tgt_ce}"
-                df_tgt.s_tjsd = ['', sign_tgt_jsd]
-                df_tgt.s_tce  = ['', sign_tgt_ce]
             print(str_out)
             if self.savetsv:
                 df_tot.to_csv(f"{self.dirout}results.tsv")
-                df_tgt.to_csv(f"{self.dirout}results_targetclass.tsv")
             return df_tot, df_tgt
 
     def run(self, n_loops=1000, sample_size=.1, targetclass=None, verbose=False):
@@ -622,8 +584,6 @@ class Bootstrap:
                 else:
                     jsd = jensenshannon(targs, preds, axis=1).mean()
                     h0_jsd_all.append(jsd)
-                    if targetclass is not None:
-                        h0_jsdtgt_all.append(jensenshannon(targs[:, targetclass].reshape(1, -1), preds[:, targetclass].reshape(1, -1), axis=1).mean())
                     if verbose:
                         print(f"{exp_idx:<60} jsd {jsd:.4f}")
 
@@ -648,8 +608,6 @@ class Bootstrap:
                     else:
                         jsd = jensenshannon(targs, preds, axis=1).mean()
                         h1_jsd_all.append(jsd)
-                        if targetclass is not None:
-                            h1_jsdtgt_all.append(jensenshannon(targs[:, targetclass].reshape(1, -1), preds[:, targetclass].reshape(1, -1), axis=1).mean())
                         if verbose:
                             print(f"{exp_idx:<60} jsd {jsd:.4f}")
                 assert np.array(h0_targs_all == h1_targs_all).all(), 'h0 and h1 targets differ'
@@ -690,8 +648,6 @@ class Bootstrap:
         if targetclass is not None:
             if self.data[list(self.data.keys())[0]]['targs'][0].shape[1] == 1:
                 df_tgt = df_tgt['mean_epochs tf1 d_tf1 s_tf1 std_tf1 tprec d_tprec s_tprec trec d_trec s_trec'.split()].round(4)
-            else:
-                df_tgt = df_tgt['mean_epochs tjsd d_tjsd s_tjsd std_tjsd tce d_tce s_tce'.split()].round(4)
             df_both = pd.concat([df_tot, df_tgt.iloc[:, 1:]], axis=1)
             print(df_both.to_string())
             if self.savetsv:
