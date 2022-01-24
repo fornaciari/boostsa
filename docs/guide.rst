@@ -15,6 +15,10 @@ Guide
         :target: https://boostsa.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
+.. image:: https://colab.research.google.com/assets/colab-badge.svg
+    :target: https://colab.research.google.com/drive/1pkbjouxjub9ve0PlVZaW_we_r1hz6Hf-#scrollTo=TGj4udXVb6Ji
+    :alt: Open In Colab
+
 Intro
 -----
 
@@ -61,6 +65,7 @@ You can also look at our Colab Tutorials:
 .. image:: https://colab.research.google.com/assets/colab-badge.svg
     :target: https://colab.research.google.com/drive/1pkbjouxjub9ve0PlVZaW_we_r1hz6Hf-#scrollTo=TGj4udXVb6Ji
     :alt: Open In Colab
+
 
 Installation
 ------------
