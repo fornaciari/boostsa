@@ -634,8 +634,6 @@ class Bootstrap:
                         df_tgt_cond['mean_epochs'] = [round(np.mean(self.data[h0_cond]['epochs']), 2), round(np.mean(self.data[h0_cond]['h1'][h1_cond]['epochs']), 2)]
                     if self.data[h0_cond]['targs'][0].shape[1] == 1:
                         df_tgt_cond['std_tf1']  = [round(np.std(h0_f1tgt_all), 2), round(np.std(h1_f1tgt_all), 2)]
-                    else:
-                        df_tgt_cond['std_tjsd'] = [round(np.std(h0_jsdtgt_all), 2), round(np.std(h1_jsdtgt_all), 2)]
                     if h0_cond not in df_tgt.index:
                         df_tgt = df_tgt.append(df_tgt_cond.iloc[0, :])
                     if h1_cond not in df_tgt.index:
