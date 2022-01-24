@@ -28,6 +28,20 @@ even in the pipeline of a complex experimental design...
 - Free software: MIT license
 - Documentation: https://boostsa.readthedocs.io.
 
+Google colab
+------------
+
+.. |colab1| image:: https://colab.research.google.com/assets/colab-badge.svg
+    :target: https://colab.research.google.com/drive/1pkbjouxjub9ve0PlVZaW_we_r1hz6Hf-#scrollTo=TGj4udXVb6Ji
+    :alt: Open In Colab
+
++----------------------------------------------------------------+--------------------+
+| Name                                                           | Link               |
++================================================================+====================+
+| You can try boostsa here:                                      | |colab1|           |
++----------------------------------------------------------------+--------------------+
+
+
 Installation
 ------------
 
@@ -133,17 +147,4 @@ The ouput will be:
 That's it!
 
 For more complex experimental designs and technical/ethical considerations, please refer to the documentation page.
-
-Google colab
-------------
-
-.. |colab1| image:: https://colab.research.google.com/assets/colab-badge.svg
-    :target: https://colab.research.google.com/drive/1KTPT29Zi2Wk57l4vQpGDvDCP3X18z4xf?usp=sharing
-    :alt: Open In Colab
-
-+----------------------------------------------------------------+--------------------+
-| Name                                                           | Link               |
-+================================================================+====================+
-| You can try boostsa here:                                      | |colab1|           |
-+----------------------------------------------------------------+--------------------+
 
