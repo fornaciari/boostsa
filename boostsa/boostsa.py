@@ -196,7 +196,7 @@ class Bootstrap:
         """
         targs = self.input2ndarray(targs)
         preds = self.input2ndarray(preds)
-        idxs = np.arange(len(preds)) if idxs is None else self.input2ndarray(idxs)
+        idxs = np.arange(len(preds)).reshape(-1, 1) if idxs is None else self.input2ndarray(idxs)
         assert len(preds) == len(targs) == len(idxs), 'preds, targs or idxs have different length'
         if h1:
             self.data[h0]['h1'][h1]['exp_idxs'].append(exp_idx)
