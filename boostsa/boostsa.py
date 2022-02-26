@@ -311,22 +311,22 @@ class Bootstrap:
         the second the target class performance (empty if not requested)
         """
         if targs.shape[1] == 1:
-            rounding_value = 2
-            h0_acc  = accuracy_score(targs, h0_preds)
-            h0_f1   = f1_score(targs, h0_preds, average='macro')
-            h0_prec = precision_score(targs, h0_preds, average='macro')
-            h0_rec  = recall_score(targs, h0_preds, average='macro')
-            h1_acc  = accuracy_score(targs, h1_preds)
-            h1_f1   = f1_score(targs, h1_preds, average='macro')
-            h1_prec = precision_score(targs, h1_preds, average='macro')
-            h1_rec  = recall_score(targs, h1_preds, average='macro')
+            rounding_value = 4
+            h0_acc    = round(accuracy_score(targs, h0_preds), rounding_value)
+            h0_f1     = round(f1_score(targs, h0_preds, average='macro'), rounding_value)
+            h0_prec   = round(precision_score(targs, h0_preds, average='macro'), rounding_value)
+            h0_rec    = round(recall_score(targs, h0_preds, average='macro'), rounding_value)
+            h1_acc    = round(accuracy_score(targs, h1_preds), rounding_value)
+            h1_f1     = round(f1_score(targs, h1_preds, average='macro'), rounding_value)
+            h1_prec   = round(precision_score(targs, h1_preds, average='macro'), rounding_value)
+            h1_rec    = round(recall_score(targs, h1_preds, average='macro'), rounding_value)
+            diff_acc  = round(h1_acc  - h0_acc, rounding_value)
+            diff_f1   = round(h1_f1   - h0_f1, rounding_value)
+            diff_prec = round(h1_prec - h0_prec, rounding_value)
+            diff_rec  = round(h1_rec  - h0_rec, rounding_value)
             # h0_conf_matrix = confusion_matrix(targs, h0_preds)
             # h1_conf_matrix = confusion_matrix(targs, h1_preds)
             # print(h0_conf_matrix, "\n", h1_conf_matrix)
-            diff_acc  = h1_acc  - h0_acc
-            diff_f1   = h1_f1   - h0_f1
-            diff_prec = h1_prec - h0_prec
-            diff_rec  = h1_rec  - h0_rec
             df_tot = pd.DataFrame({ 'f1':    [h0_f1,       h1_f1],       'd_f1':    ['',  diff_f1],       's_f1':    ['', ''],
                                     'acc':   [h0_acc,      h1_acc],      'd_acc':   ['',  diff_acc],      's_acc':   ['', ''],
                                     'prec':  [h0_prec,     h1_prec],     'd_prec':  ['',  diff_prec],     's_prec':  ['', ''],
@@ -355,12 +355,12 @@ class Bootstrap:
                 assert targetclass in np.unique(targs), 'targetclass must belong to the classes\' set'
                 h0_vals = precision_recall_fscore_support(targs, h0_preds)
                 h1_vals = precision_recall_fscore_support(targs, h1_preds)
-                h0_tgt_prec   = round(h0_vals[0][targetclass] * 100, rounding_value)
-                h0_tgt_rec    = round(h0_vals[1][targetclass] * 100, rounding_value)
-                h0_tgt_f1     = round(h0_vals[2][targetclass] * 100, rounding_value)
-                h1_tgt_prec   = round(h1_vals[0][targetclass] * 100, rounding_value)
-                h1_tgt_rec    = round(h1_vals[1][targetclass] * 100, rounding_value)
-                h1_tgt_f1     = round(h1_vals[2][targetclass] * 100, rounding_value)
+                h0_tgt_prec   = round(h0_vals[0][targetclass], rounding_value)
+                h0_tgt_rec    = round(h0_vals[1][targetclass], rounding_value)
+                h0_tgt_f1     = round(h0_vals[2][targetclass], rounding_value)
+                h1_tgt_prec   = round(h1_vals[0][targetclass], rounding_value)
+                h1_tgt_rec    = round(h1_vals[1][targetclass], rounding_value)
+                h1_tgt_f1     = round(h1_vals[2][targetclass], rounding_value)
                 diff_tgt_f1   = round(h1_tgt_f1   - h0_tgt_f1,   rounding_value)
                 diff_tgt_prec = round(h1_tgt_prec - h0_tgt_prec, rounding_value)
                 diff_tgt_rec  = round(h1_tgt_rec  - h0_tgt_rec,  rounding_value)
