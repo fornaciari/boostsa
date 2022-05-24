@@ -1,4 +1,4 @@
-boostsa - BOOtSTrap SAmpling in pyhton
+boostsa - BOOtSTrap SAmpling in python
 ======================================
 
 .. image:: https://img.shields.io/pypi/v/boostsa.svg
@@ -22,7 +22,7 @@ boostsa - BOOtSTrap SAmpling in pyhton
 Intro
 -----
 
-boostsa - BOOtSTrap SAmpinlg - is a tool to compute bootstrap sampling significance test,
+boostsa - BOOtSTrap SAmpling - is a tool to compute bootstrap sampling significance test,
 even in the pipeline of a complex experimental design...
 
 - Free software: MIT license
