@@ -1,4 +1,4 @@
-boostsa - BOOtSTrap SAmpling in python
+boostsa - BOOtSTrap SAmpling in Python
 ======================================
 
 .. image:: https://img.shields.io/pypi/v/boostsa.svg
