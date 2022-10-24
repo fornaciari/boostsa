@@ -54,6 +54,11 @@ For the metrics for soft-labels:
  *Learning from disagreement: A survey*.
  Journal of Artificial Intelligence Research, 72:1385–1470. <https://dl.acm.org/doi/pdf/10.1613/jair.1.12752>`_
 
+Please cite the use of boostsa referring to:
+
+ `Fornaciari, T., Uma, A., Poesio, M. & Hovy, D.
+ *Hard and Soft Evaluation of NLP models with BOOtSTrap SAmpling - BooStSa*
+ Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics: System Demonstrations <https://aclanthology.org/2022.acl-demo.12.pdf>`_
 
 See also :ref:`tethics`.
 
