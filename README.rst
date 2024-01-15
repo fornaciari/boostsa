@@ -11,7 +11,7 @@ boostsa - BOOtSTrap SAmpling in Python
 .. image:: https://github.com/fornaciari/boostsa/workflows/Python%20Package/badge.svg
         :target: https://github.com/fornaciari/boostsa/actions
 
-.. image:: https://readthedocs.org/projects/boostsa/latest/badge/?version=latest
+.. image:: https://readthedocs.org/projects/boostsa/badge/?version=stable
     :target: https://boostsa.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
