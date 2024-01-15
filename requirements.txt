@@ -1,7 +1,7 @@
 pip==21.0.1
 wheel==0.37.1
 twine==3.3.0
-scipy==1.7.3
+scipy==1.11.4
 tqdm
 pandas
 numpy
